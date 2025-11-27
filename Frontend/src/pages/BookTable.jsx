@@ -23,7 +23,7 @@ const BookTable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/reservation", form);
+      await axios.post("https://oldskool-backend.onrender.com/api/reservation", form);
       // show success toast
       toast.success('Reservation submitted. We will contact you soon!');
 
