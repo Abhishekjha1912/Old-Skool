@@ -15,32 +15,35 @@ connectDB();
 
 const app = express();
 
-// Create HTTP server from express app
+app.use(
+  cors({
+    origin: ["https://old-skool.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
+
+app.use(express.json());
+
 const server = createServer(app);
 
-// Create Socket.io server with proper CORS
 const io = new Server(server, {
   cors: {
     origin: "https://old-skool.vercel.app",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
-
-// Save active users - optional
-let users = {};
 
 io.on("connection", (socket) => {
   console.log("A user connected: ", socket.id);
 
-  // User joins order room
   socket.on("join_order", (orderId) => {
     socket.join(orderId);
-    console.log(`User joined room for Order: ${orderId}`);
   });
 
-  // Admin updates order status
   socket.on("update_order_status", ({ orderId, status }) => {
-    console.log(`Status Updated: Order ${orderId} -> ${status}`);
     io.to(orderId).emit("order_status_updated", { orderId, status });
   });
 
@@ -49,28 +52,16 @@ io.on("connection", (socket) => {
   });
 });
 
-// EXPRESS CORS
-app.use(cors({
-  origin: ["https://old-skool.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
-app.use(express.json());
-
-// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reservation", reservationRoutes);
-
-// Attach io to app
-app.set("io", io);
 
 app.get("/", (req, res) => {
   res.send("Old Skool Restaurant API is running");
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () =>
+  console.log(`Server running on port ${PORT}`)
+);
