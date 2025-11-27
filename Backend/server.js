@@ -21,12 +21,9 @@ const server = createServer(app);
 // Create Socket.io server with proper CORS
 const io = new Server(server, {
   cors: {
-    origin: [
-      "https://old-skool.vercel.app",
-      "http://localhost:5173"
-    ],
-    methods: ["GET", "POST"],
-  },
+    origin: "https://old-skool.vercel.app",
+    methods: ["GET", "POST"]
+  }
 });
 
 // Save active users - optional
