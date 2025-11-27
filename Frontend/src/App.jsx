@@ -59,7 +59,7 @@ function Layout() {
             <Route path="/menu" element={<Menu />} />
             <Route path="/book-table" element={<BookTable />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Login />} />
             <Route
               path="/admin/menu/edit/:id"
               element={

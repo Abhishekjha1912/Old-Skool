@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import oldEve from "../assets/oldtab.jpg";
 import oldcafe from "../assets/oldcafe.jpg";
 import oldroom from "../assets/oldroom.jpg";
-//rt oldgirl from "../assets/oldgirl.jpg";
 import Story from "../pages/Story";
 import Menu from "./Menu";
-import AdminReservations from "./admin/AdminReservations";
 import BookTable from "./BookTable";
 
 const Home = () => {
@@ -15,7 +12,6 @@ const Home = () => {
   const images = [oldEve, oldcafe, oldroom];
   const [currentImage, setCurrentImage] = useState(0);
 
-  // Auto-slide every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -29,7 +25,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar />
       <div className="relative h-screen">
         {images.map((img, index) => (
           <div
@@ -60,9 +55,7 @@ const Home = () => {
       </div>
       <Story />
       <Menu />
-      {/* <AdminReservations /> */}
       <BookTable />
-      <Reservation />
     </div>
   );
 };
