@@ -4,7 +4,10 @@ import { toast } from 'react-toastify';
 import { io } from "socket.io-client";
 import { FiTrash2, FiRefreshCw } from "react-icons/fi";
 
-const socket = io("http://localhost:5000");
+const socket = io(import.meta.env.VITE_API_URL, {
+  transports: ["websocket"],
+  withCredentials: true
+});
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
