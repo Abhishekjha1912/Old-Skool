@@ -53,15 +53,12 @@ io.on("connection", (socket) => {
 });
 
 // EXPRESS CORS
-app.use(
-  cors({
-    origin: [
-      "https://old-skool.vercel.app",
-      "http://localhost:5173"
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: ["https://old-skool.vercel.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 
