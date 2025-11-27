@@ -18,12 +18,15 @@ const app = express();
 // Create HTTP server from express app
 const server = createServer(app);
 
-// Create Socket.io server
+// Create Socket.io server with proper CORS
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
+    origin: [
+      "https://old-skool.vercel.app",
+      "http://localhost:5173"
+    ],
+    methods: ["GET", "POST"],
+  },
 });
 
 // Save active users - optional
@@ -32,7 +35,7 @@ let users = {};
 io.on("connection", (socket) => {
   console.log("A user connected: ", socket.id);
 
-  // User joins order room to get updates for their specific order
+  // User joins order room
   socket.on("join_order", (orderId) => {
     socket.join(orderId);
     console.log(`User joined room for Order: ${orderId}`);
@@ -49,7 +52,17 @@ io.on("connection", (socket) => {
   });
 });
 
-app.use(cors());
+// EXPRESS CORS
+app.use(
+  cors({
+    origin: [
+      "https://old-skool.vercel.app",
+      "http://localhost:5173"
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Routes
@@ -58,7 +71,7 @@ app.use("/api/menu", menuRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reservation", reservationRoutes);
 
-// Attach io to app (so we can use inside routes)
+// Attach io to app
 app.set("io", io);
 
 app.get("/", (req, res) => {
