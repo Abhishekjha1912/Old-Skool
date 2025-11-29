@@ -27,21 +27,28 @@ const Menu = () => {
     fetchMenuItems();
   }, []);
 
-  const fetchMenuItems = async () => {
+const fetchMenuItems = async () => {
     try {
-  setLoading(true);
-  const response = await API.get("/menu");
-      setMenuItems(response.data);
+      setLoading(true);
+      const response = await API.get("/menu");
+      
+      // Handle different response structures
+      const items = Array.isArray(response.data) 
+        ? response.data 
+        : response.data.items || response.data.data || [];
+      
+      setMenuItems(items);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching menu items:", error);
       toast.error("Failed to fetch menu items");
+      setMenuItems([]); // Ensure it's always an array
     } finally {
       setLoading(false);
     }
   };
 
   // Filter items by category
-  const filteredItems = selectedCategory
+  const filteredItems = selectedCategory && Array.isArray(menuItems)
     ? menuItems.filter(item => item.category?.toUpperCase() === selectedCategory)
     : [];
 
