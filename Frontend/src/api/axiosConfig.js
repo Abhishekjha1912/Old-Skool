@@ -1,13 +1,15 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://oldskool-backend.onrender.com/api",
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  withCredentials: true, // IMPORTANT if backend uses credentials
 });
 
-// Automatically attach token if available
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
-  if (token) req.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}`;
+  }
   return req;
 });
 

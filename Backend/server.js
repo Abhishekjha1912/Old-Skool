@@ -17,12 +17,16 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://old-skool.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://old-skool.vercel.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
+
 
 app.use(express.json());
 
@@ -30,11 +34,15 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://old-skool.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "https://old-skool.vercel.app"
+    ],
     methods: ["GET", "POST"],
     credentials: true
   }
 });
+
 
 io.on("connection", (socket) => {
   console.log("A user connected: ", socket.id);
