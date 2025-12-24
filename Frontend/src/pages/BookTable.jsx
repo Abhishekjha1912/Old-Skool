@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import API from "../api/axiosConfig";
 import { toast } from 'react-toastify';
 import tableImg from "../assets/oldgirl.jpg";
-import axios from 'axios'
 
 const BookTable = () => {
   const [form, setForm] = useState({
@@ -14,8 +13,6 @@ const BookTable = () => {
     email: "",
   });
 
-  // using toast notifications instead of inline popup/alert
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -23,11 +20,10 @@ const BookTable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/reservation", form);
-      // show success toast
+      await API.post("/reservation", form);
+
       toast.success('Reservation submitted. We will contact you soon!');
 
-      // reset form
       setForm({
         date: "",
         time: "",
@@ -37,7 +33,7 @@ const BookTable = () => {
         email: "",
       });
     } catch (err) {
-      console.error(err);
+      console.error(err.response?.data || err.message);
       toast.error('Something went wrong. Please try again later.');
     }
   };
